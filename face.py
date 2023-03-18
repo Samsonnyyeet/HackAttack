@@ -6,8 +6,6 @@
 import cv2
 import json
 import numpy as np
-import mediapipe as mp
-
 from face_detection import RetinaFace
 
 preferences_file = "preferences.json"
@@ -15,31 +13,8 @@ preferences_file = "preferences.json"
 f = open(preferences_file, 'r')
 preferences = json.load(f)
 
-# mediapipe
-mp_face_detection = mp.solutions.face_detection
-mp_drawing = mp.solutions.drawing_utils
-
 # retina face
 detector = RetinaFace()
-
-def medpipe_recognize(frame):
-    height, width, depth = frame.shape
-    # with mp_face_detection.FaceDetection(model_selection = preferences["face"]["model_selection"], 
-    #         min_detection_confidence = preferences["face"]["min_detection_confidence"]) as face_detection:
-    with mp_face_detection.FaceDetection(min_detection_confidence = preferences["face"]["min_detection_confidence"]) as face_detection:
-        results = face_detection.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-        if not results.detections:
-            return {"success": False, "detections": []}
-
-        persons = []
-        for detection in results.detections:
-            relative_data = detection.location_data.relative_bounding_box
-            xmin, ymin, w, h = relative_data.xmin, relative_data.ymin, relative_data.width, relative_data.height
-            bounding_box = (xmin * width, ymin * height, w * width, h * height)
-
-            persons.append({"bounding_box": bounding_box, "id": None})
-
-    return {"success": True, "detections": persons}
 
 def recognize_face(frame):
     width, height = preferences["face"]["width"], preferences["face"]["height"]
@@ -61,9 +36,8 @@ def recognize_face(frame):
 
     return {"success": True, "detections": persons}
 
-capture = cv2.VideoCapture(0)
-
 if __name__ == "__main__":
+    capture = cv2.VideoCapture(0)
     while capture.isOpened():
         ret, frame = capture.read()
         height, width, depth = frame.shape
@@ -88,4 +62,5 @@ if __name__ == "__main__":
             break
 
     capture.release()
+    cv2.destroyAllWindows()
 

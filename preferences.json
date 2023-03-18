@@ -5,5 +5,10 @@
         "width": 426,
         "height": 240
     },
-    "anpr": {}
+    "anpr": {
+        "car": {
+            "width": 426,
+            "height": 240
+        }
+    }
 }
