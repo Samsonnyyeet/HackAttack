@@ -1,0 +1,14 @@
+{
+    "face": {
+        "min_detection_confidence": 0.65,
+        "model_selection": 1,
+        "width": 426,
+        "height": 240
+    },
+    "anpr": {
+        "car": {
+            "width": 426,
+            "height": 240
+        }
+    }
+}
